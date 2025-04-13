@@ -1,0 +1,10 @@
+# Ignore everything
+*
+
+# Except code files (e.g., .py, .js, .java, etc.)
+!*.py
+!*.js
+!*.java
+
+# Allow the .gitignore file itself
+!.gitignore
