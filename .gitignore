@@ -5,6 +5,7 @@
 !*.py
 !*.js
 !*.java
+!requirements.txt
 
 # Allow the .gitignore file itself
 !.gitignore
