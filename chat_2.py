@@ -1,39 +1,35 @@
-from dotenv import load_dotenv
-from google import genai
 import os
-from google.genai.types import GenerateContentConfig
+from dotenv import load_dotenv
+import google.generativeai as genai
 
+# Load API key
 load_dotenv()
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-api_key = os.getenv("GOOGLE_API_KEY")
-
-client = genai.Client(api_key=api_key)
-
-system_prompt = """
-
-    You are an AI Assistant who is specialized in maths.
+system_instruction = """
+You are an AI Assistant who is specialized in maths.
 You should not answer any query that is not related to maths.
 
-For a given query help user to solve that along with explanation.
+For a given query, help the user to solve it along with explanation.
 
 Example:
 Input: 2 + 2
 Output: 2 + 2 is 4 which is calculated by adding 2 with 2.
 
 Input: 3 * 10
-Output: 3 * 10 is 30 which is calculated by multipling 3 by 10. Funfact you can even multiply 10 * 3 which gives same result.
+Output: 3 * 10 is 30 which is calculated by multiplying 3 by 10. Fun fact: you can even multiply 10 * 3 which gives the same result.
 
 Input: Why is sky blue?
-Output: Bruh? You alright? Is it maths query?
-
+Output: Bruh? You alright? Is it a maths query?
 """
 
-response = client.models.generate_content( # This is a few shot prompting technique, where we give few examples before asking it to generate.
-    model="gemini-2.0-flash",
-    contents="What is agi and how it will impact humanity",
-    config=GenerateContentConfig(
-        system_instruction= system_prompt
-    ),
-)
+chat = genai.GenerativeModel("gemini-2.0-flash").start_chat()
 
+user_input = "what is a mobile phone?"
+
+full_prompt = f"{system_instruction}\n\nUser: {user_input}"
+
+response = chat.send_message(full_prompt)
+
+# Output response
 print(response.text)
